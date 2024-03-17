@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --darkest: #1e1e1e;     /*colore per staccare valori extra*/
+  --dark: #252526;        /*colore principale di background*/
+  --light: #404040; 
+  --mask: rgba(0, 0, 0, 0.5);
+  --textColor: #FFF;
+  --textDarkColor: #000;
+}
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}*/
+
+@layer components {
+  .createShelf {
+    background-image: url(../public/icons/AddShelfIcon.png);
+  }
+  .createProduct {
+    background-image: url(../public/icons/addProductIcon.png);
+  }
+  .moveProduct {
+    background-image: url(../public/icons/movementIcon.png)
+  }
+  .webHeader {
+    background-image: url(../public/logo.png);
+  }
+  .formBtn {
+    cursor: pointer;
+    margin: auto;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    padding: 0.4em 1.2em;
+    margin-top: 0.5em;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 0.8em;
+  }
+}
