@@ -28,6 +28,8 @@ const CameraController = () => {
 
       controls.minDistance = 3;
       controls.maxDistance = 20;
+      controls.autoRotate = false; // Imposta autoRotate su false
+
       return () => {
         controls.dispose();
       };
@@ -36,6 +38,7 @@ const CameraController = () => {
   );
   return null;
 };
+
 
 const Home = () => {
   const [shelfLibContent, setShelfLib] = useState(new Array())
@@ -99,12 +102,25 @@ const Home = () => {
   });
 
   const whs = <WhsMesh width={whsWidth} depth={whsDepth} height={whsHeight}/>
-  const updateWarehouse = (e) => {
+  const updateWarehouse = async (e) => {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     e.preventDefault();
     setStarted(true)
     setWhsWidth(whsWidthRef.current.value)
     setWhsDepth(whsDepthRef.current.value)
     setWhsHeight(whsHeightRef.current.value)
+    console.log(whsWidthRef.current.value, whsDepthRef.current.value, whsHeightRef.current.value)  
+    const response = await fetch('/api/new',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            height: whsWidthRef.current.value,
+            depth: whsDepthRef.current.value,
+            width: whsHeightRef.current.value
+          })
+        }
+    )
+    console.log("response", response); 
   }
 
   const save = async () => {
@@ -178,7 +194,8 @@ const Home = () => {
       <div className="flex flex-row h-[100vh] max-[768px]:flex-col">        
         <Canvas className="bg-light overflow-auto w-[100%] h-[100%] max-[768px]:order-2 max-[768px]:w-[100%]">
           <CameraController />
-          <ambientLight intensity={0.1} />
+          <ambientLight intensity={1.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
           {whs}
           {shelfMesh}
         </Canvas>
