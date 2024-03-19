@@ -31,6 +31,9 @@
   }
   .webHeader {
     background-image: url(../public/logo.png);
+  }  
+  .saveWhs {
+    background-image: url(../public/icons/saveIcon.svg);
   }
   .formBtn {
     cursor: pointer;

@@ -1,5 +1,3 @@
-import SideContent from "@components/sideContent"
-
 const SideGroup = ({id, title, content}) => {
     return (
         <div className="side_content max-[768px]:w-[50%] max-[768px]:mx-auto" id={id}>

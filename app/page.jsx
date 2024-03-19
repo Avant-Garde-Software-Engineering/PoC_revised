@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useState } from "react"
+import { useRef } from "react"
 
 import Button from "@/components/button"
 import ModalOverlay from "@components/modalOverlay"
@@ -9,23 +10,49 @@ import FormGroup from "@components/formGroup"
 import Submit from "@components/submit"
 import Cancel from "@components/cancel"
 import SideGroup from "@components/sideGroup"
+import ShelfMesh from "@components/shelfMesh"
+import WhsMesh from "@components/whsMesh"
+import { Canvas, useThree } from "@react-three/fiber"
 import * as shelfSetup from "@utilities/shelfSetup"
 import * as prodSetup from "@utilities/prodSetup"
 import * as movSetup from "@utilities/movSetup"
 import * as whsSetup from "@utilities/whsSetup"
 import SideContent from "@components/sideContent"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+
+const CameraController = () => {
+  const { camera, gl } = useThree();
+  useEffect(
+    () => {
+      const controls = new OrbitControls(camera, gl.domElement);
+
+      controls.minDistance = 3;
+      controls.maxDistance = 20;
+      return () => {
+        controls.dispose();
+      };
+    },
+    [camera, gl]
+  );
+  return null;
+};
 
 const Home = () => {
   const [shelfLibContent, setShelfLib] = useState(new Array())
   const [prodLibContent, setProdLib] = useState(new Array())
   const [started, setStarted] = useState(false)
+  
+  /* FORM MAGAZZINO */
+  const [whsWidth, setWhsWidth] = useState(null)
+  const [whsDepth, setWhsDepth] = useState(null)
+  const [whsHeight, setWhsHeight] = useState(null)
+
+  const whsWidthRef = useRef(null)
+  const whsDepthRef = useRef(null)
+  const whsHeightRef = useRef(null)
 
   useEffect(() => {
-    if(!started) {
-      setStarted(!started)
-      whsSetup.onStartup()   
-    }
-    console.log(shelfLibContent)
+    console.log(started)
   });
 
   const removeFromShelf = (id) => {
@@ -46,6 +73,13 @@ const Home = () => {
     shelfLib.push(<SideContent key={element} value={element} onBtClick={() => {removeFromShelf(element)}} />)
   });
 
+  const shelfMesh = []
+  shelfLibContent.forEach(element => {
+    shelfMesh.push(
+      <ShelfMesh key={"mesh".concat(element)} name={element} />
+    )
+  });
+
   const removeFromProd = (id) => {
     console.log(prodLibContent)
     const nextLib = prodLibContent.slice()
@@ -64,14 +98,36 @@ const Home = () => {
     prodLib.push(<SideContent key={element} value={element} onBtClick={() => {removeFromProd(element)}} />)
   });
 
+  const whs = <WhsMesh width={whsWidth} depth={whsDepth} height={whsHeight}/>
+  const updateWarehouse = (e) => {
+    e.preventDefault();
+    setStarted(true)
+    setWhsWidth(whsWidthRef.current.value)
+    setWhsDepth(whsDepthRef.current.value)
+    setWhsHeight(whsHeightRef.current.value)
+  }
+
+  const save = async () => {
+    const response = await fetch('/api/new',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            height: whsHeight,
+            depth: whsDepth,
+            width: whsWidth
+          })
+        }
+    )
+  }
+  
   const creationForm = 
   <>
     <h2>Benvenuto in <strong>WMS3D</strong>!</h2>
     <p>Inserire le misure del magazzino da creare:</p>
-    <form id="WhsSetupForm" className="form" onSubmit={whsSetup.createWarehouse}>
-      <FormGroup labelText='Larghezza (mt): ' type='number' id='WhsWidth' step='0.01' min='0.01'/>
-      <FormGroup labelText='Profondità (mt): ' type='number' id='WhsDepth' step='0.01' min='0.01'/>
-      <FormGroup labelText='Altezza (mt): ' type='number' id='WhsHeight' step='0.01' min='0.01'/>
+    <form id="WhsSetupForm" className="form" onSubmit={updateWarehouse}>
+      <FormGroup labelText='Larghezza (mt): ' type='number' id='WhsWidth' step='0.01' min='0.01' innerRef={whsWidthRef} />
+      <FormGroup labelText='Profondità (mt): ' type='number' id='WhsDepth' step='0.01' min='0.01' innerRef={whsDepthRef} />
+      <FormGroup labelText='Altezza (mt): ' type='number' id='WhsHeight' step='0.01' min='0.01' innerRef={whsHeightRef} />
       <Submit value="Crea"/>
     </form>
   </>
@@ -117,18 +173,24 @@ const Home = () => {
           <Button id="addShelfBtn" value="Crea scaffalatura" title="Crea scaffalatura" classtype="createShelf" onclick={shelfSetup.displayShelfForm}/>
           <Button id="addProductBtn" value="Crea prodotto" title="Crea prodotto" classtype="createProduct" onclick={prodSetup.displayProdForm}/>
           <Button id="askMoveBtn" value="Richiesta di spostamento" title="Richiesta di spostamento" classtype="moveProduct" onclick={movSetup.displayMovForm}/>
+          <Button id="saveBtn" value="Salva il magazzino" title="Salva il magazzino" classtype="saveWhs" onclick={save}/>
       </div>
-      <div className="flex flex-row h-[100vh] max-[768px]:flex-col">
-        <div className="bg-light overflow-auto w-[100%] h-[100%] max-[768px]:order-2 max-[768px]:w-[100%]">canvas</div>
+      <div className="flex flex-row h-[100vh] max-[768px]:flex-col">        
+        <Canvas className="bg-light overflow-auto w-[100%] h-[100%] max-[768px]:order-2 max-[768px]:w-[100%]">
+          <CameraController />
+          <ambientLight intensity={0.1} />
+          {whs}
+          {shelfMesh}
+        </Canvas>
         <div className="w-[17em] bg-dark p-[1em] flex flex-col gap-y-[2em] max-[768px]:order-1 max-[768px]:w-[100%]">
           <SideGroup id="shelves" title="Scaffalature" content={shelfLib}/>
           <SideGroup id="products" title="Prodotti" content={prodLib}/>
         </div>
       </div>
-      <ModalOverlay id="setupWhs" children={creationForm} />
-      <ModalOverlay id="addShelf" children={addShelfForm} />
-      <ModalOverlay id="addProduct" children={addProductForm} />
-      <ModalOverlay id="requestMove" children={moveProductForm} />
+      <ModalOverlay hidden={started} id="setupWhs" children={creationForm} />
+      <ModalOverlay hidden={true} id="addShelf" children={addShelfForm} />
+      <ModalOverlay hidden={true} id="addProduct" children={addProductForm} />
+      <ModalOverlay hidden={true} id="requestMove" children={moveProductForm} />
     </>    
   )
 }
