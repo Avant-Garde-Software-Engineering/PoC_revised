@@ -8,8 +8,8 @@ export const metadata = {
 const Layout = ({ children }) => {
   return (
     <html lang="it">
-      <body className="text-textColor">
-        <main>
+      <body className="h-screen text-textColor">
+        <main className="h-screen">
           <header className="bg-darkest py-[0.5em]">
             <h1 className="webHeader indent-[-999em] h-[4em] bg-contain bg-no-repeat bg-center">WMS3D</h1>
           </header>
