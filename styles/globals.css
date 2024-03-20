@@ -54,3 +54,19 @@
     margin-top: 0.8em;
   }
 }
+
+.delete-button{
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 1em;
+  font-size: small;
+}
+
+.list-element{
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
