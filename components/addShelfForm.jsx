@@ -21,7 +21,7 @@ const AddShelfForm = ({onCancel}) => {
       return;
     }
 
-    if(shelfWidth * binSize > warehouse.width || shelfHeight * binSize > warehouse.depth){
+    if(shelfWidth * binSize > warehouse.width || shelfHeight * binSize > warehouse.height || binSize > warehouse.depth){
       alert('The shelf is too big');
       return;
     }
