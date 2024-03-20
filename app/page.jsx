@@ -29,7 +29,7 @@ export default function Home() {
         onAddShelfClick={handleAddShelfClick}
         onAddProductClick={handleAddProductClick}
       />
-      <div className='flex-1 flex flex-row'>
+      <div className='flex-1 flex flex-row max-h-[81vh]'>
         {!showWhsSetupForm && <Sidebar />}
         {!showWhsSetupForm && <Render3D />}
       </div>
