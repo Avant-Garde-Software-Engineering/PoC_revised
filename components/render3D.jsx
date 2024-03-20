@@ -3,6 +3,7 @@ import { Box, OrbitControls, PerspectiveCamera, TransformControls } from "@react
 import { Canvas } from "@react-three/fiber";
 import  Warehouse from "./warehouse";
 import { useRef } from 'react'
+import * as THREE from 'three'
 
 export default function Render3D() {
   const { warehouse, shelves, selectedObjectId } = useWarehouseStore();
@@ -15,8 +16,8 @@ export default function Render3D() {
 
   const updatePosOnStore = () =>{
     if(selectedObjectId && (
-      shelvesRef.current[selectedObjectId].position.x !== shelves.filter(shelf => shelf.name === selectedObjectId).x ||
-      shelvesRef.current[selectedObjectId].position.z !== shelves.filter(shelf => shelf.name === selectedObjectId).z
+      shelvesRef.current[selectedObjectId].position.x !== shelves.filter(shelf => shelf.name === selectedObjectId)[0].x ||
+      shelvesRef.current[selectedObjectId].position.z !== shelves.filter(shelf => shelf.name === selectedObjectId)[0].z
     )) {
       updateShelfPosition(selectedObjectId, shelvesRef.current[selectedObjectId].position.x, shelvesRef.current[selectedObjectId].position.z);
     }
@@ -25,32 +26,32 @@ export default function Render3D() {
   function handleClick(name) {
     updatePosOnStore();
     selectObject(name);
-    console.log("selezionato " + selectedObjectId);
   };
 
   function handleUnclick() {
     if(selectedObjectId) {
       updatePosOnStore();
       deselectObject(selectedObjectId);
-      console.log("deselezionato " + selectedObjectId);
     }
     else {
       console.log("nessun elemento selezionato");
     }
   };
 
-  const constrainTranslation = () => {
-    const newPos = shelvesRef.current[selectedObjectId].position;
-    // Modify newPos to ensure the child object stays within the parent object's bounds
-    if (newPos.x < 0) newPos.x = 0;
-    if (newPos.x > width) newPos.x = width;
-    if (newPos.z < 0) newPos.z = 0;
-    if (newPos.z > depth) newPos.z = depth;
-    return newPos;
-  };
+  function constrain() {
+    const bbox = new THREE.Box3().setFromObject(shelvesRef.current[selectedObjectId]);
+  
+    if(!(0 <= bbox.min.x && width >= bbox.max.x &&
+        0 <= bbox.min.z && depth >= bbox.max.z)) {
+        const currentShelf = shelves.filter(shelf => shelf.name === selectedObjectId)[0];
+        shelvesRef.current[selectedObjectId].position.x = currentShelf.x;
+        shelvesRef.current[selectedObjectId].position.y = currentShelf.y;
+        shelvesRef.current[selectedObjectId].position.z = currentShelf.z;
+    }
+  }
 
   return (
-    <Canvas className='bg-gray-700'>
+    <Canvas className='bg-gray-700 h-80-vh' >
       <PerspectiveCamera position={[0, height + (height * 3 / 2), depth + (depth / 2)]} fov={75} near={0.01} far={10000}/>
       <OrbitControls makeDefault />
       <ambientLight />
@@ -74,8 +75,8 @@ export default function Render3D() {
         />
       ))}
 
-      {/* Movimento scaffaalture */}
-      {selectedObjectId && <TransformControls showY={false}  translationSnap={0.5} onChange={constrainTranslation} object={shelvesRef.current[selectedObjectId]} />}
+      {/* Movimento scaffalature */}
+      {selectedObjectId && <TransformControls showY={false} translationSnap={0.5} onChange={constrain} object={shelvesRef.current[selectedObjectId]} />}
     </Canvas>
   );
 }

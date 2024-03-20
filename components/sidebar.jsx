@@ -13,7 +13,7 @@ export default function Sidebar() {
 
   return (
     <div className="overflow-y-scroll w-[17em] bg-dark p-[1em] flex flex-col gap-y-[2em] max-[768px]:order-1 max-[768px]:w-[100%]">
-      <h2 className='text-lg font-semibold'>Shelves</h2>
+      <h2 className='text-lg font-semibold'>Scaffalatura</h2>
       <ul>
         {shelves.map((shelf) => (
           <li className='list-element' key={shelf.name}>
@@ -22,7 +22,7 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
-      <h2 className='text-lg font-semibold'>Products</h2>
+      <h2 className='text-lg font-semibold'>Prodotti</h2>
       <ul>
         {products.map((product) => (
           <li className='list-element' key={product.name}>
