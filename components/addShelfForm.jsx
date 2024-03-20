@@ -12,6 +12,7 @@ const AddShelfForm = ({onCancel}) => {
   const [shelfHeight, setShelfHeight] = useState('');
 
   const addShelf = useWarehouseStore((state) => state.addShelf);
+  const { warehouse } = useWarehouseStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,6 +20,12 @@ const AddShelfForm = ({onCancel}) => {
       alert('Please fill in all fields');
       return;
     }
+
+    if(shelfWidth * binSize > warehouse.width || shelfHeight * binSize > warehouse.depth){
+      alert('The shelf is too big');
+      return;
+    }
+
     // Call the addShelf function from the store
     addShelf({
       name: shelfId,
