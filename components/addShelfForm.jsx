@@ -21,7 +21,7 @@ const AddShelfForm = ({onCancel}) => {
     }
     // Call the addShelf function from the store
     addShelf({
-      name: shelfId,
+      name: String(shelfId),
       binSize: parseFloat(binSize),
       width: parseInt(shelfWidth),
       height: parseInt(shelfHeight),

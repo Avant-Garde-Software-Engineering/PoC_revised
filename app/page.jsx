@@ -24,12 +24,12 @@ export default function Home() {
 
   return(
     <>
-    <div className='h-screen'>
+    <div className='flex flex-col flex-1'>
       <Toolbar
         onAddShelfClick={handleAddShelfClick}
         onAddProductClick={handleAddProductClick}
       />
-      <div className='h-full flex fle-row'>
+      <div className='flex-1 flex flex-row'>
         {!showWhsSetupForm && <Sidebar />}
         {!showWhsSetupForm && <Render3D />}
       </div>

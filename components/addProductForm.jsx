@@ -18,7 +18,7 @@ const AddProductForm = ({onCancel}) => {
     }
     // Call the addProduct function from the store
     addProduct({
-      name: ProductId,
+      name: String(ProductId),
       size: 1,    //di default da cambiare
       x: parseFloat(1/2), //di default da cambiare in base a size
       y: parseFloat(1/2), //di default da cambiare in base a size
