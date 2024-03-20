@@ -2,6 +2,7 @@ import useWarehouseStore from '@lib/store';
 import { Box, DragControls, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import  Warehouse from "./warehouse";
+import ShelfMesh from './shelfMesh';
 import { useRef } from 'react'
 
 export default function Render3D() {
@@ -21,11 +22,11 @@ export default function Render3D() {
       {/* Render shelves */}
       {shelves.map((shelf) => (
         //<DragControls dragLimits={[[0, width-shelf.width*shelf.binSize], [0, 0], [0, depth-shelf.binSize]]} onDrag={handleDrag(index)} onDragEnd={handleDragEnd}>
-          <Box
+          <ShelfMesh
             name={shelf.name}
-            key={shelf.name}
-            args={[shelf.width * shelf.binSize, shelf.height * shelf.binSize, shelf.binSize]}
-            position={[shelf.x, shelf.y, shelf.z]}
+            width={shelf.width}
+            height={shelf.height}
+            binSize={shelf.binSize}
           />
         //</DragControls>
       ))}

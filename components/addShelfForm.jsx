@@ -14,11 +14,13 @@ const AddShelfForm = ({onCancel}) => {
   const addShelf = useWarehouseStore((state) => state.addShelf);
 
   const handleSubmit = (e) => {
+    console.log("Confirm");
     e.preventDefault();
     if (!shelfId || !binSize || !shelfWidth || !shelfHeight) {
       alert('Please fill in all fields');
       return;
     }
+    console.log(shelfId, binSize, shelfWidth, shelfHeight);
     // Call the addShelf function from the store
     addShelf({
       name: shelfId,
@@ -40,6 +42,7 @@ const AddShelfForm = ({onCancel}) => {
 
   const handleCancel = () => {
     // Hide the form
+    console.log("Cancel");
     onCancel();
   };
 
@@ -48,8 +51,8 @@ const AddShelfForm = ({onCancel}) => {
       <FormGroup labelText='Grandezza bin (mt): ' type='number' id='binSize' step='0.01' min='0.01' onChange={(e) => setBinSize(e.target.value)}/>
       <FormGroup labelText='Larghezza (bin): ' type='number' id='shelfWidth' step='1' min='1' onChange={(e) => setShelfWidth(e.target.value)} />
       <FormGroup labelText='Altezza (bin): ' type='number' id='shelfHeight' step='1' min='1' onChange={(e) => setShelfHeight(e.target.value)}/>
-      <Cancel onclick={handleCancel}/>
       <Submit value="Aggiungi"/>
+      <Cancel onclick={handleCancel}/>
     </form>
 
   return (
