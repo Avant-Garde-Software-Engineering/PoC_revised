@@ -3,12 +3,12 @@ import useWarehouseStore from '@lib/store';
 export default function Sidebar() {
   const { shelves, products } = useWarehouseStore();
 
-  const handleDeleteShelf = (shelfId) => {
-    useWarehouseStore.getState().removeShelf(shelfId);
+  const handleDeleteShelf = (shelfName) => {
+    useWarehouseStore.getState().removeShelf(shelfName);
   };
 
-  const handleDeleteProduct = (productId) => {
-    useWarehouseStore.getState().removeProduct(productId);
+  const handleDeleteProduct = (productName) => {
+    useWarehouseStore.getState().removeProduct(productName);
   };
 
   return (
@@ -18,7 +18,7 @@ export default function Sidebar() {
         {shelves.map((shelf) => (
           <li className='list-element' key={shelf.name}>
             {shelf.name}
-            <button className="delete-button" onClick={() => handleDeleteShelf(shelf.id)}> Delete</button>
+            <button className="delete-button" onClick={() => handleDeleteShelf(shelf.name)}> Delete</button>
           </li>
         ))}
       </ul>
@@ -27,7 +27,7 @@ export default function Sidebar() {
         {products.map((product) => (
           <li className='list-element' key={product.name}>
             {product.name}
-            <button className="delete-button" onClick={() => handleDeleteProduct(product.id)}>Delete</button>
+            <button className="delete-button" onClick={() => handleDeleteProduct(product.name)}>Delete</button>
           </li>
         ))}
       </ul>
