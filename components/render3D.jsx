@@ -60,31 +60,33 @@ export default function Render3D() {
   }
 
   function isColliding() {
-
     const shelfToCheck = shelvesRef.current[selectedObjectId]; 
-    console.log(shelfToCheck);
     const newBBox = new THREE.Box3().setFromObject(shelfToCheck); 
-
-  for (const element of shelves) {
-    if (element.name === shelfToCheck.name) continue;
-    
-    const otherBBox = new THREE.Box3().setFromObject(shelvesRef.current[element.name]);   
-    
-    if (newBBox.intersectsBox(otherBBox)) {
-      return true; 
-    }
-  }
-
-  for (const element of products) {
-    
-    const otherBBox = new THREE.Box3().setFromObject(productsRef.current[element.name]);   
-    
-    if (newBBox.intersectsBox(otherBBox)) {
-      return true; 
-    }
-  }
   
-  return false; 
+    // Riduco dimensioni del BoundingBox per poter mettere scaffalature vicine
+    const newMin = new THREE.Vector3().copy(newBBox.min).addScalar(0.1);
+    const newMax = new THREE.Vector3().copy(newBBox.max).subScalar(0.1);
+    const reducedBBox = new THREE.Box3(newMin, newMax);
+  
+    for (const element of shelves) {
+      if (element.name === shelfToCheck.name) continue;
+      
+      const otherBBox = new THREE.Box3().setFromObject(shelvesRef.current[element.name]);   
+      
+      if (reducedBBox.intersectsBox(otherBBox)) {
+        return true; 
+      }
+    }
+  
+    for (const element of products) {
+      const otherBBox = new THREE.Box3().setFromObject(productsRef.current[element.name]);   
+      
+      if (reducedBBox.intersectsBox(otherBBox)) {
+        return true; 
+      }
+    }
+    
+    return false; 
   }
 
   function constrain() {
