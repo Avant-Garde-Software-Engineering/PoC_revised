@@ -40,6 +40,7 @@ export default function Sidebar() {
             <span className="list-text-element">
             {product.name}
             </span> 
+            <button className="move-button">Move</button>
             <button className="delete-button" onClick={() => handleDeleteProduct(product.name)}>Delete</button>
           </li>
         ))}
