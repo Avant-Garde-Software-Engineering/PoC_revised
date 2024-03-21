@@ -9,6 +9,7 @@ const AddProductForm = ({onCancel}) => {
   const [ProductId, setProductId] = useState('');
 
   const addProduct = useWarehouseStore((state) => state.addProduct);
+  const { shelves, products } = useWarehouseStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +17,12 @@ const AddProductForm = ({onCancel}) => {
       alert('Please fill in all fields');
       return;
     }
+
+    if(shelves.filter(shelf => shelf.name == ProductId)[0] !== undefined || products.filter(products => products.name == ProductId)[0] !== undefined){
+      alert('You cannot add a product with the same name of an existing 3D element');
+      return;
+    }
+
     // Call the addProduct function from the store
     addProduct({
       name: String(ProductId),

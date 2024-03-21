@@ -27,8 +27,8 @@ const AddShelfForm = ({onCancel}) => {
       return;
     }
 
-    if(shelves.filter(shelf => shelf.name == shelfId)[0] !== undefined){
-      alert('You cannot add a shelf with the same name of an existing one');
+    if(shelves.filter(shelf => shelf.name == shelfId)[0] !== undefined || products.filter(products => products.name == shelfId)[0] !== undefined){
+      alert('You cannot add a shelf with the same name of an existing 3D element');
       return;
     }
 
