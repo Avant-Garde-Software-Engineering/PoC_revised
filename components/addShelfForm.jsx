@@ -10,6 +10,7 @@ const AddShelfForm = ({onCancel}) => {
   const [binSize, setBinSize] = useState('');
   const [shelfWidth, setShelfWidth] = useState('');
   const [shelfHeight, setShelfHeight] = useState('');
+  const { shelves, products } = useWarehouseStore();
 
   const addShelf = useWarehouseStore((state) => state.addShelf);
   const { warehouse } = useWarehouseStore();
@@ -23,6 +24,11 @@ const AddShelfForm = ({onCancel}) => {
 
     if(shelfWidth * binSize > warehouse.width || shelfHeight * binSize > warehouse.height || binSize > warehouse.depth){
       alert('The shelf is too big');
+      return;
+    }
+
+    if(shelves.filter(shelf => shelf.name == shelfId)[0] !== undefined){
+      alert('You cannot add a shelf with the same name of an existing one');
       return;
     }
 
