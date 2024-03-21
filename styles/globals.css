@@ -9,6 +9,7 @@
   --mask: rgba(0, 0, 0, 0.5);
   --textColor: #FFF;
   --textDarkColor: #000;
+  --selectionColor: #ff6080;
 }
 /*
 @media (prefers-color-scheme: dark) {
@@ -62,11 +63,37 @@
   padding: 0.5em 1em;
   border-radius: 10px;
   cursor: pointer;
-  margin-left: 1em;
-  font-size: small;
+  margin: 0.3em;
+}
+
+.delete-button:hover{
+  background-color: var(--light);
+  color: var(--textColor);
 }
 
 .list-element{
-  margin-top: 1em;
-  margin-bottom: 1em;
+  font-size: small;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: fit-content;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  text-align: center;
+  padding: 0.5em;
+}
+
+.list-text-element{
+  background-color: white;
+  color: var(--textDarkColor);
+  border: none;
+  border-radius: 10px;
+  width: fit-content;
+  text-align: center;
+  padding: 0.5em;
+  margin: 0.3em;
+}
+
+.list-text-element:hover{
+  background-color: var(--light);
+  color: var(--textColor);
 }
