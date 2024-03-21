@@ -45,7 +45,18 @@ export default function Render3D() {
 
   function isInsideWarehouse(){
     const bbox = new THREE.Box3().setFromObject(shelvesRef.current[selectedObjectId]);  
-    return 0 <= bbox.min.x && width >= bbox.max.x && 0 <= bbox.min.z && depth >= bbox.max.z;
+    if(bbox.min.x < 0) {
+      shelvesRef.current[selectedObjectId].position.x = (bbox.max.x - bbox.min.x) / 2;
+    }
+    if(bbox.max.x > width) {
+      shelvesRef.current[selectedObjectId].position.x = width - (bbox.max.x - bbox.min.x) / 2;
+    }
+    if(bbox.min.z < 0) {
+      shelvesRef.current[selectedObjectId].position.z = (bbox.max.z - bbox.min.z) / 2;
+    }
+    if(bbox.max.z > depth) {
+      shelvesRef.current[selectedObjectId].position.z = depth - (bbox.max.z - bbox.min.z) / 2;
+    }
   }
 
   function isColliding() {
@@ -77,11 +88,12 @@ export default function Render3D() {
   }
 
   function constrain() {
-    if(!isInsideWarehouse() || isColliding()) {
-        const currentShelf = shelves.filter(shelf => shelf.name === selectedObjectId)[0];
-        shelvesRef.current[selectedObjectId].position.x = currentShelf.x;
-        shelvesRef.current[selectedObjectId].position.y = currentShelf.y; 
-        shelvesRef.current[selectedObjectId].position.z = currentShelf.z;
+    isInsideWarehouse();
+    if(isColliding()) {
+      const currentShelf = shelves.filter(shelf => shelf.name === selectedObjectId)[0];
+      shelvesRef.current[selectedObjectId].position.x = currentShelf.x;
+      shelvesRef.current[selectedObjectId].position.y = currentShelf.y; 
+      shelvesRef.current[selectedObjectId].position.z = currentShelf.z;
     }
   }
 
