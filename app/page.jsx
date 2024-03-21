@@ -34,7 +34,7 @@ export default function Home() {
         {!showWhsSetupForm && <Render3D />}
       </div>
     </div>
-    {showWhsSetupForm && <WhsSetupForm onSubmit={ () => setShowWhsSetupForm(false) } />}
+    {showWhsSetupForm && <WhsSetupForm onSubmit={ () => setShowWhsSetupForm(false)} />}
     {showAddShelfForm && <AddShelfForm onCancel={() => setShowAddShelfForm(false)} />}
     {showAddProdForm && <AddProductForm onCancel={() => setShowAddProdForm(false)} />}
   </>

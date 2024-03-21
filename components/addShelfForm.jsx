@@ -39,7 +39,7 @@ const AddShelfForm = ({onCancel}) => {
       width: parseInt(shelfWidth),
       height: parseInt(shelfHeight),
       x: parseFloat(binSize*shelfWidth/2),
-      y: parseFloat(binSize*shelfHeight/2),
+      y: parseFloat(0),
       z: parseFloat(binSize/2)
     });
     // Clear form fields
