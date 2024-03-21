@@ -2,6 +2,7 @@ import useWarehouseStore from '@lib/store';
 import { Box, OrbitControls, PerspectiveCamera, TransformControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import  Warehouse from "./warehouse";
+import ShelfMesh from './shelfMesh';
 import { useRef } from 'react'
 import * as THREE from 'three'
 
@@ -62,17 +63,20 @@ export default function Render3D() {
 
       {/* Render shelves */}
       {shelves.map((shelf) => (
-        <Box
+        <ShelfMesh
           name={shelf.name}
+          width={shelf.width}
+          height={shelf.height}
+          binSize={shelf.binSize}
           key={shelf.name}
-          args={[shelf.width * shelf.binSize, shelf.height * shelf.binSize, shelf.binSize]}
-          position={[shelf.x, shelf.y, shelf.z]}
+          position={[shelf.x, 0, shelf.z]}
           ref={(element) => shelvesRef.current[shelf.name] = element}
           onClick={() => handleClick(shelf.name)}
           onPointerMissed={handleUnclick}
-          material-color={selectedObjectId === shelf.name ? '#ff6080' : 'white'}
+          material_color={selectedObjectId === shelf.name ? '#ff6080' : 'white'}
           dispose={null}
-        />
+          />
+        
       ))}
 
       {/* Movimento scaffalature */}

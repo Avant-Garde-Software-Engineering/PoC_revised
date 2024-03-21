@@ -55,8 +55,8 @@ const AddShelfForm = ({onCancel}) => {
       <FormGroup labelText='Grandezza bin (mt): ' type='number' id='binSize' step='0.01' min='0.01' onChange={(e) => setBinSize(e.target.value)}/>
       <FormGroup labelText='Larghezza (bin): ' type='number' id='shelfWidth' step='1' min='1' onChange={(e) => setShelfWidth(e.target.value)} />
       <FormGroup labelText='Altezza (bin): ' type='number' id='shelfHeight' step='1' min='1' onChange={(e) => setShelfHeight(e.target.value)}/>
-      <Cancel onclick={handleCancel}/>
       <Submit value="Aggiungi"/>
+      <Cancel onclick={handleCancel}/>
     </form>
 
   return (
