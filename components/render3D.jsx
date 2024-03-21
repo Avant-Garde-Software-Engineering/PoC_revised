@@ -25,14 +25,17 @@ export default function Render3D() {
     }
   }
 
-  function handleClick(name) {
+  const updatePos = () => {
+    constrain();
     updatePosOnStore();
+  }
+
+  function handleClick(name) {
     selectObject(name);
   };
 
   function handleUnclick() {
     if(selectedObjectId) {
-      updatePosOnStore();
       deselectObject(selectedObjectId);
     }
     else {
@@ -57,7 +60,7 @@ export default function Render3D() {
   }
 
   return (
-    <Canvas className='bg-gray-700 h-80-vh' >
+    <Canvas className='bg-gray-700 h-80-vh'>
       <PerspectiveCamera position={[0, height + (height * 3 / 2), depth + (depth / 2)]} fov={75} near={0.01} far={10000}/>
       <OrbitControls makeDefault />
       <ambientLight />
@@ -99,7 +102,7 @@ export default function Render3D() {
       ))} 
 
       {/* Movimento scaffalature */}
-      {selectedObjectId && <TransformControls showY={false} translationSnap={0.5} onChange={constrain} object={shelvesRef.current[selectedObjectId]} />}
+      {selectedObjectId && <TransformControls showY={false} translationSnap={0.5} onMouseUp={updatePos} object={shelvesRef.current[selectedObjectId]} />}
     </Canvas>
   );
 }

@@ -1,9 +1,12 @@
 import useWarehouseStore from '@lib/store';
 
 export default function Sidebar() {
-  const { shelves, products } = useWarehouseStore();
+  const { shelves, products , selectedObjectId} = useWarehouseStore();
 
   const handleDeleteShelf = (shelfName) => {
+    if(selectedObjectId === shelfName) {
+      useWarehouseStore.getState().deselectObject();
+    }
     useWarehouseStore.getState().removeShelf(shelfName);
   };
 
@@ -11,13 +14,17 @@ export default function Sidebar() {
     useWarehouseStore.getState().removeProduct(productName);
   };
 
+  const handleSelectShelf = (shelfName) => {
+    useWarehouseStore.getState().selectObject(shelfName);
+  };
+
   return (
     <div className="overflow-y-scroll w-[17em] bg-dark p-[1em] flex flex-col gap-y-[2em] max-[768px]:order-1 max-[768px]:w-[100%]">
       <h2 className='text-lg font-semibold'>Scaffalatura</h2>
       <ul>
         {shelves.map((shelf) => (
-          <li className='list-element' key={shelf.name}>
-            {shelf.name}
+          <li className='list-element' key={shelf.name} >
+            <button onClick={() => handleSelectShelf(shelf.name)}>{shelf.name}</button>
             <button className="delete-button" onClick={() => handleDeleteShelf(shelf.name)}> Delete</button>
           </li>
         ))}

@@ -43,8 +43,8 @@ const AddProductForm = ({onCancel}) => {
 
   const addProductForm = <form id="ProductSetupForm" className="form" onSubmit={handleSubmit}>
       <FormGroup labelText='Nome: ' type='text' id='prodName' onChange={(e) => setProductId(e.target.value)} />
-      <Cancel onclick={handleCancel}/>
       <Submit value="Aggiungi"/>
+      <Cancel onclick={handleCancel}/>
     </form>
 
   return (
