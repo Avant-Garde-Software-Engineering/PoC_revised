@@ -3,7 +3,7 @@ import { Box, OrbitControls, PerspectiveCamera, TransformControls } from "@react
 import { Canvas } from "@react-three/fiber";
 import  Warehouse from "./warehouse";
 import ShelfMesh from './shelfMesh';
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react';
 import * as THREE from 'three'
 
 export default function Render3D() {
@@ -102,6 +102,17 @@ export default function Render3D() {
   function handleClickProd(name) {
     console.log("selezionato prodotto " + name);
   }
+
+  const lastAddedShelfId = useWarehouseStore(state => state.lastAddedShelfId);
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      if (shelvesRef.current[lastAddedShelfId]) {
+        selectObject(lastAddedShelfId);
+      }
+    }, 0);
+
+    return () => clearTimeout(timerId);
+  }, [lastAddedShelfId]);
 
   return (
     <Canvas className='bg-gray-700 h-80-vh'>
