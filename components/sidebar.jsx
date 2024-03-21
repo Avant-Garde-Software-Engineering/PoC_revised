@@ -19,7 +19,7 @@ export default function Sidebar() {
   };
 
   const handleSelectProduct = (productName) => {
-    useWarehouseStore.getState().selectObject(productName);
+    useWarehouseStore.getState().selectProduct(productName);
   };
 
   return (
@@ -37,9 +37,7 @@ export default function Sidebar() {
       <ul>
         {products.map((product) => (
           <li className='list-element' key={product.name}>
-            <span className="list-text-element">
-            {product.name}
-            </span> 
+            <button className="list-text-element" onClick={() => handleSelectProduct(product.name)}>{product.name}</button>
             <button className="delete-button" onClick={() => handleDeleteProduct(product.name)}>Delete</button>
           </li>
         ))}

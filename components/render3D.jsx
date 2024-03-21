@@ -7,10 +7,12 @@ import { useRef, useEffect } from 'react';
 import * as THREE from 'three'
 
 export default function Render3D() {
-  const { warehouse, shelves, selectedObjectId, products } = useWarehouseStore();
+  const { warehouse, shelves, selectedObjectId, selectedProductId, products } = useWarehouseStore();
   const { width, depth, height } = warehouse;
   const selectObject = useWarehouseStore((state) => state.selectObject);
   const deselectObject = useWarehouseStore((state) => state.deselectObject);
+  const selectProduct = useWarehouseStore((state) => state.selectProduct);
+  const deselectProduct = useWarehouseStore((state) => state.deselectProduct);
   const updateShelfPosition = useWarehouseStore((state) => state.updateShelfPosition);
 
   const shelvesRef = useRef([]);
@@ -99,9 +101,18 @@ export default function Render3D() {
     }
   }
 
-  function handleClickProd(name) {
-    console.log("selezionato prodotto " + name);
-  }
+  function handleClickProduct(name) {
+    selectProduct(name);
+  };
+
+  function handleUnclickProduct() {
+    if(selectedProductId) {
+      deselectProduct(selectedProductId);
+    }
+    else {
+      console.log("nessun elemento selezionato");
+    }
+  };
 
   const lastAddedShelfId = useWarehouseStore(state => state.lastAddedShelfId);
   useEffect(() => {
@@ -150,8 +161,9 @@ export default function Render3D() {
           args={[prod.size, prod.size, prod.size]}
           position={[prod.x, prod.y, prod.z]}
           ref={(element) => productsRef.current[prod.name] = element}
-          material-color={'green'}
-          onClick={() => handleClickProd(prod.name)}
+          material-color={selectedProductId === prod.name ? '#ff6080' : 'green'} 
+          onClick={() => handleClickProduct(prod.name)}
+          onPointerMissed={handleUnclickProduct}
           dispose={null}
           />
       ))} 
