@@ -40,11 +40,41 @@ export default function Render3D() {
     }
   };
 
-  function constrain() {
-    const bbox = new THREE.Box3().setFromObject(shelvesRef.current[selectedObjectId]);
+  function isInsideWarehouse(){
+    const bbox = new THREE.Box3().setFromObject(shelvesRef.current[selectedObjectId]);  
+    return 0 <= bbox.min.x && width >= bbox.max.x && 0 <= bbox.min.z && depth >= bbox.max.z;
+  }
 
-    if(!(0 <= bbox.min.x && width >= bbox.max.x &&
-        0 <= bbox.min.z && depth >= bbox.max.z)) {
+  function isColliding() {
+
+    const shelfToCheck = shelvesRef.current[selectedObjectId]; 
+    console.log(shelfToCheck);
+    const newBBox = new THREE.Box3().setFromObject(shelfToCheck); 
+
+  for (const element of shelves) {
+    if (element.name === shelfToCheck.name) continue;
+    
+    const otherBBox = new THREE.Box3().setFromObject(shelvesRef.current[element.name]);   
+    
+    if (newBBox.intersectsBox(otherBBox)) {
+      return true; 
+    }
+  }
+
+  for (const element of products) {
+    
+    const otherBBox = new THREE.Box3().setFromObject(productsRef.current[element.name]);   
+    
+    if (newBBox.intersectsBox(otherBBox)) {
+      return true; 
+    }
+  }
+  
+  return false; 
+  }
+
+  function constrain() {
+    if(!isInsideWarehouse() || isColliding()) {
         const currentShelf = shelves.filter(shelf => shelf.name === selectedObjectId)[0];
         shelvesRef.current[selectedObjectId].position.x = currentShelf.x;
         shelvesRef.current[selectedObjectId].position.y = currentShelf.y; 
