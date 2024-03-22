@@ -1,7 +1,16 @@
+'use client';
+
 import useWarehouseStore from '@lib/store';
+import { useState } from 'react';
+import MoveProductForm from '@components/moveProductForm';
 
 export default function Sidebar() {
   const { shelves, products , selectedObjectId} = useWarehouseStore();
+  const [showMoveProdForm, setShowMoveProdForm] = useState(false);
+
+  const handleMoveProduct = () => {
+    setShowMoveProdForm(true);
+  };
 
   const handleDeleteShelf = (shelfName) => {
     if(selectedObjectId === shelfName) {
@@ -23,6 +32,7 @@ export default function Sidebar() {
   };
 
   return (
+    <>
     <div className="overflow-y-scroll w-[17em] bg-dark p-[1em] flex flex-col gap-y-[1em] max-[768px]:order-1 max-[768px]:w-[100%]">
       <h2 className='text-lg font-semibold'>Scaffalature</h2>
       <ul>
@@ -38,11 +48,13 @@ export default function Sidebar() {
         {products.map((product) => (
           <li className='list-element' key={product.name}>
             <button className="list-text-element" onClick={() => handleSelectProduct(product.name)}>{product.name}</button>
-            <button className="move-button">Move</button>
+            <button className="move-button" onClick={() => handleMoveProduct()} >Move</button>
             <button className="delete-button" onClick={() => handleDeleteProduct(product.name)}>Delete</button>
           </li>
         ))}
       </ul>
     </div>
+    {showMoveProdForm && <MoveProductForm onCancel={ () => setShowMoveProdForm(false)} />}
+    </>
   );
 }
